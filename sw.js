@@ -1,6 +1,6 @@
 // Offline support: app shell is cache-first; Google Fonts are cached on first use.
 // Bump VERSION whenever index.html changes so phones pick up the new build.
-const VERSION = "kr-v1";
+const VERSION = "kr-v2";
 const SHELL = ["./", "index.html", "manifest.webmanifest", "icons/icon-192.png", "icons/icon-512.png", "icons/apple-touch-icon.png"];
 
 self.addEventListener("install", e => {

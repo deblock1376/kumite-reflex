@@ -150,6 +150,33 @@ details.fine summary{cursor:pointer;color:var(--muted);font-size:14px;font-weigh
 .rt-pop{position:absolute;right:16px;top:12px;z-index:7;font-family:var(--display);font-weight:800;font-size:28px;color:var(--good);font-variant-numeric:tabular-nums}
 .rt-pop.bad{color:var(--aka)}
 
+/* camera timing */
+.campanel{border:1.5px solid var(--line);border-radius:6px;padding:14px 16px;display:grid;gap:12px}
+.campanel h4{margin:0;font-family:var(--display);font-weight:800;font-size:18px;letter-spacing:.06em;text-transform:uppercase}
+.camrow{display:grid;grid-template-columns:minmax(0,170px) minmax(0,1fr);gap:14px;align-items:start}
+@media (max-width:480px){.camrow{grid-template-columns:minmax(0,1fr)}}
+.camview{position:relative;aspect-ratio:4/3;max-width:100%;background:#05070a;border-radius:4px;overflow:hidden;border:1px solid var(--line)}
+.camview .off{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:13px;text-align:center;padding:8px}
+#camVideo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scaleX(-1);display:block}
+.camtext{font-size:14px;color:#c3c9d4;display:grid;gap:8px;min-width:0}
+.camtext p{margin:0}
+.camstatus{font-weight:700;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.camstatus.live{color:var(--good)}
+.camstatus.err{color:var(--aka);text-transform:none;letter-spacing:0;font-size:14px}
+.cambtn{justify-self:start;background:var(--mat-2);border:1.5px solid var(--ink);border-radius:4px;padding:7px 14px;font-weight:700;font-size:14px;letter-spacing:.06em;text-transform:uppercase}
+.mbar{position:relative;display:block;height:10px;width:120px;margin-top:6px;background:var(--mat-2);border:1px solid var(--line);border-radius:2px;overflow:hidden}
+.mbar.wide{width:100%;height:12px}
+.mbar i{position:absolute;left:0;top:0;bottom:0;width:0;background:var(--good)}
+.mbar s{position:absolute;top:0;bottom:0;width:2px;left:0;background:var(--gold);text-decoration:none}
+.camthumb{position:absolute;left:12px;bottom:calc(env(safe-area-inset-bottom,0px) + 12px);width:min(28vw,120px);aspect-ratio:4/3;border-radius:4px;overflow:hidden;border:1px solid var(--line);z-index:7;background:#05070a;transition:opacity .2s}
+#train.inround .camthumb{opacity:.35}
+.breakdown{margin-top:18px;overflow-x:auto}
+.breakdown h3{margin:0 0 6px;font-family:var(--display);font-weight:800;font-size:18px;letter-spacing:.06em;text-transform:uppercase}
+.breakdown table{width:100%;border-collapse:collapse;font-size:15px;font-variant-numeric:tabular-nums}
+.breakdown td{padding:6px 0;border-top:1px solid var(--line)}
+.breakdown td.n{text-align:right;color:var(--muted);width:70px}
+.breakdown td.v{text-align:right;width:90px;font-weight:700}
+
 /* summary panel inside training */
 .summary{position:absolute;inset:0;overflow:auto;display:flex;align-items:center;justify-content:center;padding-inline:16px;padding-block:24px;z-index:8;background:var(--mat)}
 .summary .card{width:100%;max-width:640px}
@@ -197,6 +224,20 @@ details.fine summary{cursor:pointer;color:var(--muted);font-size:14px;font-weigh
         <div class="row"><span>Your belt</span><div class="seg" id="segBelt"></div></div>
         <div class="row"><span>Audio cue</span><div class="seg" id="segAudio"></div></div>
         <div class="toggles" id="toggles"></div>
+        <div class="campanel" id="camPanel" hidden>
+          <h4>Camera check</h4>
+          <div class="camrow">
+            <div class="camview" id="camHome"><div class="off" id="camOff">Camera off</div><video id="camVideo" muted playsinline autoplay></video></div>
+            <div class="camtext">
+              <div class="camstatus" id="camStatus">Camera off</div>
+              <p>Stand the device where the front camera sees your whole body from 2–3 m away. Bounce lightly in stance and the green bar stays below the gold line. Blitz and it should jump past it.</p>
+              <span class="mbar wide" aria-hidden="true"><i id="camMeter"></i><s id="camThr"></s></span>
+              <div class="row"><span>Sensitivity</span><div class="seg" id="segSens"></div></div>
+              <button class="cambtn" id="camTest" type="button">Start camera check</button>
+              <p style="color:var(--muted);font-size:13px">Only the amount of motion is measured, on this device. No video is recorded or sent anywhere. Keep coaches and teammates out of frame.</p>
+            </div>
+          </div>
+        </div>
         <details class="fine">
           <summary>Fine-tune timing</summary>
           <div class="sliders">
@@ -219,7 +260,7 @@ details.fine summary{cursor:pointer;color:var(--muted);font-size:14px;font-weigh
     <div id="hist"></div>
   </section>
 
-  <p class="science"><b>Why it works.</b> Gaps between cues are random, so you can't time the rhythm and have to react to what you see. The ladder adds load one layer at a time: one stimulus with one answer, then several choices, then a rule you have to apply before moving, then reading a body cue the way you would read an opponent. Go/No-Go cues (Yame, feints) train you to hold still, which keeps you from getting drawn onto a counter. Turn on <b>Tap to time</b> when a coach is holding the device and wants rough reaction times. Their own reaction adds about 150–200 ms, so compare one session against another, not against an absolute number.</p>
+  <p class="science"><b>Why it works.</b> Gaps between cues are random, so you can't time the rhythm and have to react to what you see. The ladder adds load one layer at a time: one stimulus with one answer, then several choices, then a rule you have to apply before moving, then reading a body cue the way you would read an opponent. Go/No-Go cues (Yame, feints) train you to hold still, which keeps you from getting drawn onto a counter. <b>Camera timing</b> uses the front camera to spot the instant you start moving after each cue and logs that as your reaction time. It all runs on the device. <b>Tap to time</b> is the fallback when a coach is holding the device, but the coach's own reaction adds about 150–200 ms. With either method, compare one session against another rather than against an absolute number.</p>
 </div>
 
 <div id="train" hidden>
@@ -230,12 +271,14 @@ details.fine summary{cursor:pointer;color:var(--muted);font-size:14px;font-weigh
       <div class="stat">Cues<b id="hCues">0</b></div>
     </div>
     <div class="r">
+      <div class="stat" id="hMeterWrap" hidden>Motion<span class="mbar"><i id="hMeter"></i><s id="hThr"></s></span></div>
       <div class="stat clock" id="hClockWrap">Time<b id="hClock">1:30</b></div>
       <button id="bPause">Pause</button>
       <button id="bEnd">End</button>
     </div>
   </div>
   <div class="area cq" id="area">
+    <div class="camthumb" id="camThumb" hidden></div>
     <div class="tapnote" id="tapnote" hidden>Tap anywhere or press Space when the athlete moves</div>
   </div>
 </div>
@@ -351,7 +394,7 @@ function pick(arr, avoid){
 /* ================= settings ================= */
 const DEFAULTS = {drill:"footwork", level:"competitor", gapMin:1.2, gapMax:3.0, hold:0.9,
   roundSec:90, rounds:3, restSec:30, belt:"aka", audio:"off",
-  calls:true, pressure:true, showAnswer:true, tap:false};
+  calls:true, pressure:true, showAnswer:true, tap:false, camera:false, camSens:"med"};
 let S = {...DEFAULTS};
 try { const saved = JSON.parse(localStorage.getItem("kr-settings")||"null"); if (saved) S = {...DEFAULTS, ...saved}; } catch(e){}
 function save(){ try{ localStorage.setItem("kr-settings", JSON.stringify(S)); }catch(e){} }
@@ -519,11 +562,17 @@ function renderRules(){
   $("rules").innerHTML = `<h4>${d.lvl===2?"Number calls":"Game plan"} · ${d.name}</h4><table>${rulesFor(S.drill).map(([a,b])=>`<tr><td>${a}</td><td>${b}</td></tr>`).join("")}</table>`;
 }
 function renderToggles(){
-  const T=[["calls","Referee calls"],["pressure","Pressure ramp"],["showAnswer","Show answer after cue"],["tap","Tap to time"]];
+  const T=[["calls","Referee calls"],["pressure","Pressure ramp"],["showAnswer","Show answer after cue"],["camera","Camera timing"],["tap","Tap to time"]];
   const host=$("toggles"); host.innerHTML="";
   T.forEach(([k,l])=>{
     const b=document.createElement("button"); b.type="button"; b.className="tog"; b.textContent=l; b.setAttribute("aria-pressed",String(!!S[k]));
-    b.onclick=()=>{ S[k]=!S[k]; save(); b.setAttribute("aria-pressed",String(S[k])); refresh(); };
+    b.onclick=()=>{
+      S[k]=!S[k];
+      if(k==="camera" && S.camera) S.tap=false;
+      if(k==="tap" && S.tap) S.camera=false;
+      if(!S.camera) Cam.stop();
+      save(); renderToggles(); renderCamPanel(); refresh();
+    };
     host.appendChild(b);
   });
 }
@@ -571,6 +620,150 @@ const preview = {
   }
 };
 
+/* ================= camera timing ================= */
+// Frame differencing on a tiny grayscale copy of the front camera. A reaction is the
+// first moment motion clears a threshold set from the ~0.8 s of stance just before the cue.
+const SENS = { low:{label:"Low", floor:.05, k:5}, med:{label:"Medium", floor:.03, k:4}, high:{label:"High", floor:.015, k:3} };
+const METER_MAX = .25;
+const Cam = {
+  W:80, H:60, stream:null, video:null, ctx:null, prev:null, lastVT:-1, hist:[], level:0, err:null, starting:null,
+  get on(){ return !!(this.stream && this.stream.getVideoTracks().some(t=>t.readyState==="live")); },
+  start(){
+    if(this.on) return Promise.resolve(true);
+    if(this.starting) return this.starting;
+    this.starting = (async()=>{
+      try{
+        if(!navigator.mediaDevices?.getUserMedia) throw new Error("unsupported");
+        this.stream = await navigator.mediaDevices.getUserMedia({audio:false,
+          video:{facingMode:"user", width:{ideal:320}, height:{ideal:240}, frameRate:{ideal:60}}});
+        const v = this.video = $("camVideo");
+        v.srcObject = this.stream; v.muted = true; v.setAttribute("playsinline","");
+        await v.play().catch(()=>{});
+        if(!this.ctx){ const c=document.createElement("canvas"); c.width=this.W; c.height=this.H; this.ctx=c.getContext("2d",{willReadFrequently:true}); }
+        this.prev=null; this.hist=[]; this.err=null; this.lastVT=-1;
+        this.loop();
+        return true;
+      }catch(e){
+        this.err = e && e.name==="NotAllowedError" ? "Camera access was blocked. Allow the camera for this site in your browser settings, then try again."
+          : e && e.message==="unsupported" ? "This browser can't use the camera here. Open the site in Safari or Chrome."
+          : "The camera didn't start (" + ((e && (e.name||e.message)) || "unknown error") + ").";
+        this.stream=null; return false;
+      }finally{ this.starting=null; renderCamPanel(); }
+    })();
+    return this.starting;
+  },
+  stop(){
+    this.stream?.getTracks().forEach(t=>t.stop()); this.stream=null;
+    if(this.video) this.video.srcObject=null;
+    this.level=0; this.hist=[]; renderCamPanel();
+  },
+  loop(){
+    const v=this.video, stream=this.stream;
+    const step=(now, meta)=>{
+      if(this.stream!==stream || !stream) return;
+      this.sample(meta && meta.captureTime ? meta.captureTime : performance.now(), !!meta);
+      sched();
+    };
+    const sched=()=>{ if(v.requestVideoFrameCallback) v.requestVideoFrameCallback(step); else requestAnimationFrame(t=>step(t,null)); };
+    sched();
+  },
+  sample(t, fresh){
+    const v=this.video;
+    if(v.readyState<2) return;
+    if(!fresh){ if(v.currentTime===this.lastVT) return; this.lastVT=v.currentTime; }
+    const {W,H,ctx}=this;
+    ctx.drawImage(v,0,0,W,H);
+    const d=ctx.getImageData(0,0,W,H).data, n=W*H, cur=new Uint8Array(n), prev=this.prev;
+    let changed=0;
+    for(let i=0,j=0;i<n;i++,j+=4){
+      const g=(d[j]*77+d[j+1]*150+d[j+2]*29)>>8; cur[i]=g;
+      if(prev && Math.abs(g-prev[i])>22) changed++;
+    }
+    this.prev=cur;
+    if(!prev) return;
+    const m=changed/n; this.level=m;
+    this.hist.push({t,m});
+    while(this.hist.length && this.hist[0].t<t-2500) this.hist.shift();
+    onMotion(t,m);
+  },
+  stats(from,to){
+    const xs=this.hist.filter(x=>x.t>=from && x.t<=to).map(x=>x.m);
+    if(xs.length<4) return null;
+    const mean=xs.reduce((a,b)=>a+b,0)/xs.length;
+    return {mean, sd:Math.sqrt(xs.reduce((a,b)=>a+(b-mean)**2,0)/xs.length)};
+  },
+  threshold(at){
+    const P=SENS[S.camSens]||SENS.med, st=this.stats(at-800,at)||{mean:0,sd:0};
+    return Math.max(P.floor, st.mean+P.k*Math.max(st.sd,.004));
+  }
+};
+
+function placeVideo(hostId){
+  const v=$("camVideo"), host=$(hostId);
+  if(v.parentElement!==host){ host.appendChild(v); v.play?.().catch(()=>{}); }
+}
+function renderCamPanel(){
+  const panel=$("camPanel"); if(!panel) return;
+  panel.hidden=!S.camera;
+  const st=$("camStatus");
+  st.className="camstatus"+(Cam.err?" err":Cam.on?" live":"");
+  st.textContent = Cam.err || (Cam.on ? "Live · measuring motion" : "Camera off");
+  $("camOff").hidden=Cam.on;
+  $("camTest").textContent = Cam.on ? "Stop camera" : "Start camera check";
+}
+function setMeter(barId, thrId, level, thr){
+  $(barId).style.width = Math.min(100, level/METER_MAX*100)+"%";
+  $(thrId).style.left = Math.min(99, thr/METER_MAX*100)+"%";
+}
+function updateMeters(){
+  if(!Cam.on) return;
+  const now=performance.now();
+  if(R){ const thr = R.det && !R.det.done ? R.det.thr : Cam.threshold(now); setMeter("hMeter","hThr",Cam.level,thr); }
+  else if(!$("camPanel").hidden){ setMeter("camMeter","camThr",Cam.level,Cam.threshold(now)); }
+}
+
+function cueKey(c){
+  if(!c) return "";
+  switch(S.drill){
+    case "footwork": return DIRS[c.dir].label;
+    case "technique": { if(c.seq.length>1) return `${c.seq.length}-hit combo`; const t=TECH[c.seq[0]-1]; return `${t.n} · ${t.name} ${t.tgt}`; }
+    case "akaao": return c.yame ? "Yame" : c.col===S.belt ? "Follow (your color)" : "Mirror (their color)";
+    case "read": return TELL[c.tell].tell;
+  }
+  return "";
+}
+function record(ms, key){ R.rts.push(ms); (R.byKey[key] ||= []).push(ms); }
+function pop(text, bad){
+  const el=document.createElement("div"); el.className="rt-pop"+(bad?" bad":""); el.textContent=text;
+  $("area").appendChild(el); setTimeout(()=>el.remove(), 900);
+}
+function armDetector(c){
+  if(!S.camera || !Cam.on){ R.det=null; return; }
+  R.det = { start:R.cueWall, nogo:!!c.nogo, key:cueKey(c), thr:Cam.threshold(R.cueWall),
+            over:0, first:0, done:false, deadline:R.cueWall + S.hold*1000 + 700 };
+}
+function onMotion(t, m){
+  const det = R && R.det;
+  if(!det || det.done || R.paused || t<det.start) return;
+  if(m>det.thr){
+    if(!det.over) det.first=t;
+    if(++det.over>=2) resolveDetector(Math.round(det.first-det.start));
+  } else det.over=0;
+}
+function resolveDetector(ms){
+  const det=R.det; det.done=true;
+  if(det.nogo){ R.errors++; pop("Fault · moved on No-Go", true); }
+  else if(ms<100){ R.early++; pop("Early · anticipated", true); }
+  else { record(ms, det.key); pop(ms+" ms"); }
+}
+function checkDetectorTimeout(){
+  const det=R.det;
+  if(!det || det.done || performance.now()<det.deadline) return;
+  det.done=true;
+  if(det.nogo){ R.holds++; pop("Held · clean"); }
+  else { R.misses++; pop("No move seen", true); }
+}
+
 /* ================= session ================= */
 let R = null; // running session
 let wakeLock = null;
@@ -588,8 +781,14 @@ function startSession(){
   $("hDrill").textContent=d.name;
   $("tapnote").hidden=!S.tap;
   R = { st, d, round:1, phase:"count", t:0, phaseEnd:3, paused:false, cue:null, cueOn:false, cueStart:0, cueEnd:0, ansEnd:0,
-        nextCue:0, warned:false, lastCount:4, tapped:false,
-        log:[], cues:0, rts:[], errors:0, early:0, roundCues:0 };
+        nextCue:0, warned:false, lastCount:4, tapped:false, det:null,
+        cues:0, rts:[], byKey:{}, errors:0, early:0, misses:0, holds:0, roundCues:0,
+        via: S.camera ? "camera" : S.tap ? "tap" : null };
+  $("camThumb").hidden=!S.camera; $("hMeterWrap").hidden=!S.camera;
+  if(S.camera){
+    placeVideo("camThumb");
+    Cam.start().then(ok=>{ if(!ok && R){ $("camThumb").hidden=true; $("hMeterWrap").hidden=true; R.via=null; pop("Camera unavailable · running untimed", true); } });
+  }
   st.message("3", `Round 1 of ${S.rounds}`);
   try{ document.documentElement.requestFullscreen?.().catch(()=>{}); }catch(e){}
   try{ navigator.wakeLock?.request("screen").then(l=>wakeLock=l).catch(()=>{}); }catch(e){}
@@ -613,6 +812,7 @@ function fireCue(){
   R.cueStart=R.t; R.cueEnd=R.t+S.hold; R.cueWall=performance.now();
   R.d.show(R.st,c);
   R.cues++; R.roundCues++;
+  armDetector(c);
   if(S.audio==="beep") beep(1040,.07,"square",.16);
   else if(S.audio==="voice") say(c.say,{rate:1.4});
 }
@@ -638,6 +838,7 @@ function tick(dt, now){
   } else if(R.phase==="round"){
     const left=R.phaseEnd-R.t;
     if(!R.warned && left<=15 && S.roundSec>20){ R.warned=true; beep(990,.08,"sine",.2); beep(990,.08,"sine",.2,.14); call("atoshi"); }
+    checkDetectorTimeout();
     if(R.cueOn && R.t>=R.cueEnd) endCue();
     if(R.ansEnd && R.t>=R.ansEnd){ R.ansEnd=0; st.answer(null); }
     if(!R.cueOn && R.t>=R.nextCue && left>S.hold+.3) fireCue();
@@ -653,6 +854,7 @@ function tick(dt, now){
     if(left<=0){ R.round++; R.phase="count"; R.phaseEnd=R.t+3; R.lastCount=4; }
   }
   st.draw(now,dt);
+  $("train").classList.toggle("inround", R.phase==="round");
   updateHud();
 }
 
@@ -668,18 +870,15 @@ function updateHud(){
 function onTap(e){
   if(!R || R.paused || R.phase!=="round" || !S.tap) return;
   if(e && e.target.closest && e.target.closest("button")) return;
-  const pop=document.createElement("div"); pop.className="rt-pop";
   if(R.cueOn && !R.tapped){
     R.tapped=true;
     const ms=Math.round(performance.now()-R.cueWall);
-    if(R.cue.nogo){ R.errors++; pop.textContent="Fault · moved on No-Go"; pop.classList.add("bad"); }
-    else { R.rts.push(ms); pop.textContent=ms+" ms"; }
+    if(R.cue.nogo){ R.errors++; pop("Fault · moved on No-Go", true); }
+    else { record(ms, cueKey(R.cue)); pop(ms+" ms"); }
   } else if(!R.cueOn){
-    if(R.cue && R.cue.nogo && R.t-R.cueEnd<.6){ R.errors++; pop.textContent="Fault · moved on No-Go"; }
-    else { R.early++; pop.textContent="Early · anticipated"; }
-    pop.classList.add("bad");
-  } else return;
-  $("area").appendChild(pop); setTimeout(()=>pop.remove(),900);
+    if(R.cue && R.cue.nogo && R.t-R.cueEnd<.6){ R.errors++; pop("Fault · moved on No-Go", true); }
+    else { R.early++; pop("Early · anticipated", true); }
+  }
 }
 
 function finish(){
@@ -690,27 +889,35 @@ function finish(){
   const sd=n>1?Math.round(Math.sqrt(rts.reduce((a,b)=>a+(b-avg)**2,0)/(n-1))):null;
   // history
   let hist=[]; try{ hist=JSON.parse(localStorage.getItem("kr-history")||"[]"); }catch(e){}
-  hist.unshift({at:Date.now(), drill:S.drill, level:S.level, rounds:r.round, cues:r.cues, avg, errors:r.errors});
+  hist.unshift({at:Date.now(), drill:S.drill, level:S.level, rounds:r.round, cues:r.cues, avg, errors:r.errors, via:r.via});
   hist=hist.slice(0,12);
   try{ localStorage.setItem("kr-history", JSON.stringify(hist)); }catch(e){}
-  const prevSame=hist.slice(1).find(h=>h.drill===S.drill && h.avg);
+  const prevSame=hist.slice(1).find(h=>h.drill===S.drill && h.avg && (h.via||"tap")===r.via);
   const delta = (avg && prevSame) ? avg-prevSame.avg : null;
 
   const box=document.createElement("div"); box.className="summary";
   const tiles=[["Cues",r.cues,""],["Rounds",r.round,""]];
-  if(S.tap){
+  if(r.via){
     tiles.push(["Avg reaction", avg??"–", avg?"ms":""], ["Best", best??"–", best?"ms":""], ["Spread (SD)", sd??"–", sd?"ms":""], ["No-Go faults", r.errors, ""], ["Early", r.early, ""]);
+    if(r.via==="camera") tiles.push(["No move seen", r.misses, ""]);
   }
+  const rows=Object.entries(r.byKey).map(([k,v])=>[k, v.length, Math.round(v.reduce((a,b)=>a+b,0)/v.length)]).sort((a,b)=>b[2]-a[2]);
+  const breakdown = rows.length>1 ? `<div class="breakdown"><h3>Slowest first</h3><table>${rows.map(([k,n,a])=>`<tr><td>${k}</td><td class="n">${n}×</td><td class="v">${a} ms</td></tr>`).join("")}</table></div>` : "";
+  const how = r.via==="camera" ? "Measured by camera from cue to first movement. Includes roughly 30–80 ms of camera delay, so compare sessions against each other."
+            : r.via==="tap" ? "Times include the tapper's own reaction. Compare against your own earlier sessions."
+            : "Turn on Camera timing or Tap to time to measure reactions.";
   box.innerHTML=`<div class="card">
     <h2>Yame</h2>
     <p class="sub2">${r.d.name} · ${LEVELS[S.level].label} · ${S.rounds} × ${fmt(S.roundSec)}</p>
     <div class="tiles">${tiles.map(([a,b,c])=>`<div class="tile"><span>${a}</span><b>${b}</b><em>${c}</em></div>`).join("")}</div>
-    <p class="note">${S.tap ? (delta!==null ? `${delta<=0?"Faster":"Slower"} than your last ${r.d.name} session by ${Math.abs(delta)} ms.` : "Times include the tapper's own reaction. Compare against your own earlier sessions.") : "Turn on Tap to time if a partner can log your reactions."} ${nextTip()}</p>
+    ${breakdown}
+    <p class="note">${delta!==null ? `${delta<=0?"Faster":"Slower"} than your last ${r.d.name} session by ${Math.abs(delta)} ms. ` : ""}${how} ${nextTip()}</p>
     <div class="acts"><button class="primary" id="again">Go again</button><button id="home2">Change drill</button></div>
   </div>`;
   $("area").appendChild(box);
   $("again").onclick=startSession;
   $("home2").onclick=exitSession;
+  R.det=null;
   try{ wakeLock?.release(); }catch(e){}
 }
 function nextTip(){
@@ -722,6 +929,7 @@ function nextTip(){
 
 function exitSession(){
   R=null; $("train").hidden=true; $("home").hidden=false;
+  Cam.stop(); placeVideo("camHome");
   try{ if(document.fullscreenElement) document.exitFullscreen(); }catch(e){}
   try{ speechSynthesis.cancel(); }catch(e){}
   try{ wakeLock?.release(); }catch(e){}
@@ -730,17 +938,17 @@ function exitSession(){
 function togglePause(){
   if(!R || R.phase==="done") return;
   R.paused=!R.paused; $("bPause").textContent=R.paused?"Resume":"Pause";
-  if(R.paused){ R.st.message("Paused","Tap Resume or press P"); }
+  if(R.paused){ R.det=null; R.st.message("Paused","Tap Resume or press P"); }
   else { R.lastCount=99; if(R.phase==="round"){ R.st.hideMessage(); if(R.cueOn) endCue(); } }
 }
 
 function renderHistory(){
   let hist=[]; try{ hist=JSON.parse(localStorage.getItem("kr-history")||"[]"); }catch(e){}
   const host=$("hist");
-  if(!hist.length){ host.innerHTML=`<p class="empty">No sessions yet. Finished sessions show up here with cue counts, and reaction times when Tap to time is on.</p>`; return; }
+  if(!hist.length){ host.innerHTML=`<p class="empty">No sessions yet. Finished sessions show up here with cue counts, and reaction times when Camera timing or Tap to time is on.</p>`; return; }
   host.innerHTML="<ul>"+hist.slice(0,8).map(h=>{
     const d=new Date(h.at), ds=d.toLocaleDateString(undefined,{month:"short",day:"numeric"})+" "+d.toLocaleTimeString(undefined,{hour:"numeric",minute:"2-digit"});
-    return `<li><span class="d">${ds}</span><span>${DRILLS[h.drill]?.name||h.drill} · ${LEVELS[h.level]?.label||""} · ${h.rounds} rd</span><span>${h.cues} cues${h.avg?` · ${h.avg} ms`:""}</span></li>`;
+    return `<li><span class="d">${ds}</span><span>${DRILLS[h.drill]?.name||h.drill} · ${LEVELS[h.level]?.label||""} · ${h.rounds} rd</span><span>${h.cues} cues${h.avg?` · ${h.avg} ms${h.via==="camera"?" cam":h.via==="tap"?" tap":""}`:""}</span></li>`;
   }).join("")+"</ul>";
 }
 
@@ -749,6 +957,7 @@ let last=performance.now();
 function frame(now){
   const dt=Math.min(.1,(now-last)/1000); last=now;
   if(R) tick(dt,now); else preview.tick(dt,now);
+  updateMeters();
   requestAnimationFrame(frame);
 }
 
@@ -765,10 +974,13 @@ document.addEventListener("keydown", e=>{
 });
 document.addEventListener("visibilitychange", ()=>{
   if(document.hidden && R && !R.paused && R.phase!=="done") togglePause();
+  if(!document.hidden && R && R.phase!=="done" && S.camera && !Cam.on) Cam.start();
   if(!document.hidden && R && R.phase!=="done"){ try{ navigator.wakeLock?.request("screen").then(l=>wakeLock=l).catch(()=>{}); }catch(e){} }
 });
 
-initSettings(); renderDrills(); renderRules(); renderHistory(); preview.init(); refresh();
+seg("segSens", Object.entries(SENS).map(([k,v])=>[k,v.label]), "camSens");
+$("camTest").onclick=()=>{ if(Cam.on) Cam.stop(); else Cam.start(); };
+initSettings(); renderDrills(); renderRules(); renderHistory(); renderCamPanel(); preview.init(); refresh();
 requestAnimationFrame(frame);
 })();
 </script>
